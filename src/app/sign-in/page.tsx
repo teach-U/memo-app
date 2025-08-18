@@ -57,28 +57,40 @@ export default function SignInPage() {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="username" {...field} />
-              </FormControl>
-              <FormDescription>
-                Please enter your username in this app.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" variant="outline" disabled={isPending}>
-          {isPending ? "Loading..." : "Sign in"}
-        </Button>
-      </form>
-    </Form>
+    <div className="h-screen flex flex-col items-center justify-center space-y-3">
+      <Form {...form}>
+        <form
+          className="flex flex-col items-center justify-center space-y-2"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input className="bg-white" placeholder="username" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Please enter your username in this app.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            variant={isPending ? "outline" : "default"}
+            disabled={isPending}
+          >
+            {isPending ? "Loading..." : "Sign in"}
+          </Button>
+        </form>
+      </Form>
+      <Button variant="secondary" onClick={() => router.push("/")}>
+        Cancel
+      </Button>
+    </div>
   );
 }
