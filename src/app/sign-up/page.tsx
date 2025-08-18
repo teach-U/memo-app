@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -20,11 +20,14 @@ import { UserType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { getUsers } from "../actions";
+import { LayoutWrapperContext } from "../components/layout-wrapper";
 import { addUser } from "./actions";
 
 export default function SignUpPage() {
   const [users, setUsers] = useState<UserType[]>([]);
   const [isPending, startTransition] = useTransition();
+
+  const { setIsLoggedIn } = useContext(LayoutWrapperContext)!;
 
   const router = useRouter();
 
@@ -55,6 +58,7 @@ export default function SignUpPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const newUser = await addUser(values.username);
 
+    setIsLoggedIn(true);
     router.push(`/${newUser.id}`);
   };
 
@@ -72,7 +76,11 @@ export default function SignUpPage() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input className="bg-white" placeholder="username" {...field} />
+                  <Input
+                    className="bg-white"
+                    placeholder="username"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   This is your name in this app.

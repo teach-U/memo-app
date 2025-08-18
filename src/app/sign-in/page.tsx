@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -19,11 +20,12 @@ import { UserType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { getUsers } from "../actions";
-import { useRouter } from "next/navigation";
+import { LayoutWrapperContext } from "../components/layout-wrapper";
 
 export default function SignInPage() {
   const [users, setUsers] = useState<UserType[]>([]);
   const [isPending, startTransition] = useTransition();
+  const { setIsLoggedIn } = useContext(LayoutWrapperContext)!;
 
   const router = useRouter();
 
@@ -53,6 +55,7 @@ export default function SignInPage() {
       (user: UserType) => user.name === values.username
     )[0];
 
+    setIsLoggedIn(true);
     router.push(`/${user.id}`);
   };
 
@@ -70,7 +73,11 @@ export default function SignInPage() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input className="bg-white" placeholder="username" {...field} />
+                  <Input
+                    className="bg-white"
+                    placeholder="username"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   Please enter your username in this app.
