@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -20,9 +19,9 @@ import { UserType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { getUsers } from "../actions";
-import { addUser } from "./actions";
+import { useRouter } from "next/navigation";
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const [users, setUsers] = useState<UserType[]>([]);
   const [isPending, startTransition] = useTransition();
 
@@ -36,13 +35,10 @@ export default function SignUpPage() {
   }, []);
 
   const formSchema = z.object({
-    username: z
-      .string()
-      .min(1, "Please enter username")
-      .refine(
-        (val) => !users.some((user: UserType) => user.name === val),
-        "That username is already in use."
-      ),
+    username: z.enum(
+      users.map((user: UserType) => user.name),
+      "That name doesn’t exist."
+    ),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,9 +49,11 @@ export default function SignUpPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const newUser = await addUser(values.username);
+    const user = users.filter(
+      (user: UserType) => user.name === values.username
+    )[0];
 
-    router.push(`/${newUser.id}`);
+    router.push(`/${user.id}`);
   };
 
   return (
@@ -70,13 +68,15 @@ export default function SignUpPage() {
               <FormControl>
                 <Input placeholder="username" {...field} />
               </FormControl>
-              <FormDescription>This is your name in this app.</FormDescription>
+              <FormDescription>
+                Please enter your username in this app.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" variant="outline" disabled={isPending}>
-          {isPending ? "Loading..." : "Sign up"}
+          {isPending ? "Loading..." : "Sign in"}
         </Button>
       </form>
     </Form>
