@@ -15,7 +15,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
@@ -26,8 +25,9 @@ import {
 import { MemoType } from "@/types/type";
 
 import { getAllMemos } from "../actions";
+import { AddMemoForm } from "./add-memo-form";
 import { AppWrapperContext } from "./app-wrapper";
-import { Button } from "@/components/ui/button";
+import { UserIcon } from "./icons/user-icon";
 
 export const AppSidebar = () => {
   const [memos, setMemos] = useState<MemoType[]>([]);
@@ -57,7 +57,7 @@ export const AppSidebar = () => {
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupLabel>Memos</SidebarGroupLabel>
-              <SidebarGroupAction title="create memo">+</SidebarGroupAction>
+              <AddMemoForm />
               <SidebarGroupContent>
                 <SidebarMenu>
                   {memos.map((memo: MemoType) => (
@@ -66,7 +66,7 @@ export const AppSidebar = () => {
                         <Link href={`/${userId}/${memo.id}`}>{memo.title}</Link>
                       </SidebarMenuButton>
                       <SidebarMenuBadge>
-                        {String(memo.createAt)}
+                        {`${memo.createAt.getMonth()}/${memo.createAt.getDate()}`}
                       </SidebarMenuBadge>
                     </SidebarMenuItem>
                   ))}
@@ -79,9 +79,9 @@ export const AppSidebar = () => {
               <SidebarMenuItem>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button>{user?.name}</Button>
+                    <UserIcon size="28" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent side="top">
                     <DropdownMenuItem>
                       <span>{user?.name}</span>
                     </DropdownMenuItem>
