@@ -1,14 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useContext } from "react";
+import { EditForm } from "./components/edit-form";
+import { AppWrapperContext } from "../components/app-wrapper";
 
 export default function MemoPage() {
-  const { userId, memoId } = useParams();
+  const { memos } = useContext(AppWrapperContext)!;
 
-  return (
-    <div>
-      <div>{userId}</div>
-      <div>{memoId}</div>
-    </div>
-  );
+  return <div>{memos && <EditForm />}</div>;
 }

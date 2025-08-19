@@ -1,5 +1,5 @@
 import { useParams, useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useTransition } from "react";
+import { useContext, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -27,18 +27,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SidebarMenuAction } from "@/components/ui/sidebar";
-import { MemoType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { addMemo, getAllMemos } from "../actions";
+import { AppWrapperContext } from "./app-wrapper";
 
-interface Props {
-  setMemos: Dispatch<SetStateAction<MemoType[]>>;
-}
-
-export const AddMemoForm = ({ setMemos }: Props) => {
+export const AddMemoForm = () => {
   const { userId } = useParams();
   const [isPending, startTransition] = useTransition();
+
+  const { setMemos } = useContext(AppWrapperContext)!;
 
   const router = useRouter();
 

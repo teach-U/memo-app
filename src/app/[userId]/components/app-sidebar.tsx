@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useContext, useEffect, useState, useTransition } from "react";
+import { useContext } from "react";
 
 import {
   DropdownMenu,
@@ -24,24 +24,13 @@ import {
 } from "@/components/ui/sidebar";
 import { MemoType } from "@/types/type";
 
-import { getAllMemos } from "../actions";
 import { AddMemoForm } from "./add-memo-form";
 import { AppWrapperContext } from "./app-wrapper";
 
 export const AppSidebar = () => {
-  const [memos, setMemos] = useState<MemoType[]>([]);
-  const [isPending, startTransition] = useTransition();
-
-  const user = useContext(AppWrapperContext);
+  const { user, memos, isPending } = useContext(AppWrapperContext)!;
 
   const { userId } = useParams();
-
-  useEffect(() => {
-    startTransition(async () => {
-      const memos = await getAllMemos(String(userId));
-      setMemos(memos);
-    });
-  }, [userId]);
 
   return (
     <Sidebar className="top-12 h-[clsx(100vw-3rem)]">
@@ -56,7 +45,7 @@ export const AppSidebar = () => {
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupLabel>Memos</SidebarGroupLabel>
-              <AddMemoForm setMemos={setMemos} />
+              <AddMemoForm />
               <SidebarGroupContent>
                 <SidebarMenu>
                   {memos.map((memo: MemoType) => (
