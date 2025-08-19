@@ -12,3 +12,7 @@ export const updateMemo = async (
     where: { id },
   });
 };
+
+export const deleteMemo = async (id: string) => {
+  await prisma.memo.delete({ where: { id } });
+};

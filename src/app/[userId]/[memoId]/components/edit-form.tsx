@@ -1,4 +1,4 @@
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -17,14 +17,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { MemoType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { AppWrapperContext } from "../../components/app-wrapper";
-import { updateMemo } from "../action";
 import { getAllMemos } from "../../actions";
+import { AppWrapperContext } from "../../components/app-wrapper";
+import { deleteMemo, updateMemo } from "../action";
 
 export const EditForm = () => {
   const { userId, memoId } = useParams();
 
   const { memos, setMemos } = useContext(AppWrapperContext)!;
+
+  const router = useRouter();
 
   const formSchema = z.object({
     title: z.string().min(1, "Please enter memo title"),
@@ -56,10 +58,22 @@ export const EditForm = () => {
     setMemos(memos);
   };
 
+  const handleDelete = async () => {
+    await deleteMemo(String(memoId));
+
+    const memos = await getAllMemos(String(userId));
+    setMemos(memos);
+
+    router.push(`/${userId}`)
+  };
+
   return (
-    <div>
+    <div className="flex flex-col w-[calc(100vw-16rem)] h-[calc(100vw-3rem)] p-2 space-y-3">
       <Form {...form}>
-        <form className="flex flex-col" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className="flex flex-col space-y-2.5"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FormField
             control={form.control}
             name="title"
@@ -68,7 +82,7 @@ export const EditForm = () => {
                 <FormLabel>Title</FormLabel>
                 <FormControl>
                   <Input
-                    className="bg-white"
+                    className="bg-white w-full"
                     placeholder="memo title"
                     {...field}
                   />
@@ -85,7 +99,7 @@ export const EditForm = () => {
                 <FormLabel>Content</FormLabel>
                 <FormControl>
                   <Textarea
-                    className="bg-white"
+                    className="bg-white w-full h-96"
                     placeholder="memo content"
                     {...field}
                   />
@@ -96,6 +110,11 @@ export const EditForm = () => {
           <Button type="submit">Save</Button>
         </form>
       </Form>
+      <div>
+        <Button className="w-full" variant="secondary" onClick={handleDelete}>
+          Delete
+        </Button>
+      </div>
     </div>
   );
 };

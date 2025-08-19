@@ -33,7 +33,7 @@ export const AppSidebar = () => {
   const { userId } = useParams();
 
   return (
-    <Sidebar className="top-12 h-[clsx(100vw-3rem)]">
+    <Sidebar className="top-12 h-[calc(100vw-3rem)]">
       {isPending ? (
         <SidebarContent>
           <SidebarGroup>
