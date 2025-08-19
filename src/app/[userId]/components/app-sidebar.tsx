@@ -27,7 +27,6 @@ import { MemoType } from "@/types/type";
 import { getAllMemos } from "../actions";
 import { AddMemoForm } from "./add-memo-form";
 import { AppWrapperContext } from "./app-wrapper";
-import { UserIcon } from "./icons/user-icon";
 
 export const AppSidebar = () => {
   const [memos, setMemos] = useState<MemoType[]>([]);
@@ -57,7 +56,7 @@ export const AppSidebar = () => {
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupLabel>Memos</SidebarGroupLabel>
-              <AddMemoForm />
+              <AddMemoForm setMemos={setMemos} />
               <SidebarGroupContent>
                 <SidebarMenu>
                   {memos.map((memo: MemoType) => (
@@ -79,9 +78,11 @@ export const AppSidebar = () => {
               <SidebarMenuItem>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <UserIcon size="28" />
+                    <SidebarMenuButton className="text-2xl">
+                      {user?.name}
+                    </SidebarMenuButton>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent side="top">
+                  <DropdownMenuContent>
                     <DropdownMenuItem>
                       <span>{user?.name}</span>
                     </DropdownMenuItem>

@@ -1,4 +1,5 @@
-import { useTransition } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -26,11 +27,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SidebarMenuAction } from "@/components/ui/sidebar";
+import { MemoType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addMemo } from "../actions";
-import { useParams, useRouter } from "next/navigation";
 
-export const AddMemoForm = () => {
+import { addMemo, getAllMemos } from "../actions";
+
+interface Props {
+  setMemos: Dispatch<SetStateAction<MemoType[]>>;
+}
+
+export const AddMemoForm = ({ setMemos }: Props) => {
   const { userId } = useParams();
   const [isPending, startTransition] = useTransition();
 
@@ -51,6 +57,9 @@ export const AddMemoForm = () => {
     startTransition(async () => {
       const newMemo = await addMemo(String(userId), values.title);
 
+      const memos = await getAllMemos(String(userId));
+      setMemos(memos);
+
       router.push(`/${userId}/${newMemo.id}`);
     });
   };
@@ -69,7 +78,10 @@ export const AddMemoForm = () => {
                 <DialogTitle>create a new memo</DialogTitle>
               </DialogHeader>
               <Form {...form}>
-                <form className="flex flex-col items-center justify-center space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
+                <form
+                  className="flex flex-col items-center justify-center space-y-3"
+                  onSubmit={form.handleSubmit(onSubmit)}
+                >
                   <FormField
                     control={form.control}
                     name="title"
