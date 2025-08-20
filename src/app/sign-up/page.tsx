@@ -16,12 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { addUser, getUsers } from "@/lib/actions/user";
 import { UserType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { getUsers } from "../actions";
 import { LayoutWrapperContext } from "../components/layout-wrapper";
-import { addUser } from "./actions";
 
 export default function SignUpPage() {
   const [users, setUsers] = useState<UserType[]>([]);

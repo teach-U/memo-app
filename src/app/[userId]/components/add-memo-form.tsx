@@ -29,8 +29,8 @@ import { Input } from "@/components/ui/input";
 import { SidebarMenuAction } from "@/components/ui/sidebar";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { addMemo, getAllMemos } from "../actions";
 import { AppWrapperContext } from "./app-wrapper";
+import { addMemo, getAllMemos } from "@/lib/actions/memo";
 
 export const AddMemoForm = () => {
   const { userId } = useParams();

@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { useParams } from "next/navigation";
 import {
   createContext,
   Dispatch,
@@ -10,10 +10,13 @@ import {
   useState,
   useTransition,
 } from "react";
-import { AppSidebar } from "./app-sidebar";
-import { useParams } from "next/navigation";
+
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { getAllMemos } from "@/lib/actions/memo";
+import { getUser } from "@/lib/actions/user";
 import { MemoType, UserType } from "@/types/type";
-import { getAllMemos, getUser } from "../actions";
+
+import { AppSidebar } from "./app-sidebar";
 
 interface Context {
   user: UserType | null;
@@ -40,7 +43,7 @@ export const AppWrapper = ({ children }: Readonly<{ children: ReactNode }>) => {
   }, [userId]);
 
   return (
-    <AppWrapperContext.Provider value={{user, memos, setMemos, isPending}}>
+    <AppWrapperContext.Provider value={{ user, memos, setMemos, isPending }}>
       <SidebarProvider defaultOpen={true} open={true}>
         <AppSidebar />
         {isPending ? "Loading..." : children}

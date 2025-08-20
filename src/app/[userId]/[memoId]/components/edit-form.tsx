@@ -14,12 +14,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { deleteMemo, getAllMemos, updateMemo } from "@/lib/actions/memo";
 import { MemoType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { getAllMemos } from "../../actions";
 import { AppWrapperContext } from "../../components/app-wrapper";
-import { deleteMemo, updateMemo } from "../action";
 
 export const EditForm = () => {
   const { userId, memoId } = useParams();
@@ -64,7 +63,7 @@ export const EditForm = () => {
     const memos = await getAllMemos(String(userId));
     setMemos(memos);
 
-    router.push(`/${userId}`)
+    router.push(`/${userId}`);
   };
 
   return (
